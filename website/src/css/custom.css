@@ -1,0 +1,8 @@
+/*
+ * Keep presentation intentionally minimal.
+ * Canonical knowledge structure must not depend on CSS.
+ */
+
+article {
+  max-width: 900px;
+}

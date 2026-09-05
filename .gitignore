@@ -1,0 +1,24 @@
+# macOS / editors
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Node
+node_modules/
+website/node_modules/
+website/.docusaurus/
+website/build/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary files
+tmp/
+.cache/

@@ -1,0 +1,94 @@
+name: Translate
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'knowledge/**/*.md'
+      - 'knowledge/**/*.mdx'
+      - '_meta/glossary.yaml'
+  workflow_dispatch:
+
+# Translation is disabled by default.
+# Enable only after implementing scripts/translate.mjs:
+# repository variable ENABLE_TRANSLATION=true
+# repository secret DEEPL_AUTH_KEY
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  translate:
+    if: ${{ vars.ENABLE_TRANSLATION == 'true' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.0
+
+      - name: Check DeepL secret
+        env:
+          DEEPL_AUTH_KEY: ${{ secrets.DEEPL_AUTH_KEY }}
+        shell: bash
+        run: |
+          if [ -z "$DEEPL_AUTH_KEY" ]; then
+            echo "DEEPL_AUTH_KEY is not configured."
+            exit 1
+          fi
+
+      - name: Translate changed canonical Markdown
+        env:
+          DEEPL_AUTH_KEY: ${{ secrets.DEEPL_AUTH_KEY }}
+        shell: bash
+        run: |
+          node scripts/translate.mjs \
+            --source knowledge \
+            --locales ja,zh-Hans
+
+      - name: Detect changes
+        id: diff
+        shell: bash
+        run: |
+          if git diff --quiet -- website/i18n; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create translation branch
+        if: steps.diff.outputs.changed == 'true'
+        shell: bash
+        run: |
+          branch="automation/translation-${GITHUB_RUN_ID}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git checkout -b "$branch"
+          git add website/i18n
+          git commit -m "chore(i18n): update derived translations"
+          git push origin "$branch"
+
+          echo "TRANSLATION_BRANCH=$branch" >> "$GITHUB_ENV"
+
+      - name: Open translation PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh pr create \
+            --base main \
+            --head "$TRANSLATION_BRANCH" \
+            --title "chore(i18n): update derived translations" \
+            --body "Automated derived translations from canonical knowledge on main. No canonical knowledge was changed."

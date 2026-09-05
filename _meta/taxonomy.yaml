@@ -1,0 +1,12 @@
+schema_version: 1
+status: uninitialized
+generated_at: null
+
+principles:
+  primary_organization: problem-domain
+  avoid_primary_organization_by:
+    - vendor
+    - framework
+    - product
+
+domains: []

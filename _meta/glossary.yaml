@@ -1,0 +1,12 @@
+schema_version: 1
+canonical_language: en
+
+# Keep this empty until bootstrap identifies terms that need stable wording.
+# Example:
+# terms:
+#   agent-harness:
+#     canonical: "Agent Harness"
+#     translate: false
+#     aliases: []
+
+terms: {}

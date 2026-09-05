@@ -1,0 +1,99 @@
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-build:
+    name: validate-and-build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.0
+
+      - name: Validate JSONL
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          files = [
+              Path("references/seen.jsonl"),
+              Path("references/sources.jsonl"),
+          ]
+
+          failed = False
+
+          for path in files:
+              if not path.exists():
+                  print(f"ERROR: missing {path}")
+                  failed = True
+                  continue
+
+              for line_number, raw in enumerate(
+                  path.read_text(encoding="utf-8").splitlines(),
+                  start=1,
+              ):
+                  if not raw.strip():
+                      continue
+
+                  try:
+                      value = json.loads(raw)
+                  except json.JSONDecodeError as exc:
+                      print(f"ERROR: {path}:{line_number}: {exc}")
+                      failed = True
+                      continue
+
+                  if not isinstance(value, dict):
+                      print(
+                          f"ERROR: {path}:{line_number}: "
+                          "each line must be a JSON object"
+                      )
+                      failed = True
+
+          if failed:
+              raise SystemExit(1)
+
+          print("JSONL validation passed.")
+          PY
+
+      - name: Detect initialized knowledge
+        id: knowledge
+        shell: bash
+        run: |
+          if find knowledge -type f \( -name '*.md' -o -name '*.mdx' \) \
+            -print -quit | grep -q .; then
+            echo "initialized=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "initialized=false" >> "$GITHUB_OUTPUT"
+            echo "Knowledge is not initialized yet; site build will be skipped."
+          fi
+
+      - name: Install dependencies
+        if: steps.knowledge.outputs.initialized == 'true'
+        shell: bash
+        run: |
+          if [ -f website/package-lock.json ]; then
+            npm --prefix website ci
+          else
+            npm --prefix website install
+          fi
+
+      - name: Build Docusaurus
+        if: steps.knowledge.outputs.initialized == 'true'
+        env:
+          SITE_URL: https://agent-harness-info.pages.dev
+        run: npm --prefix website run build

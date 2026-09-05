@@ -1,0 +1,38 @@
+name: Weekly Update Helper
+
+# The primary executor is a Codex scheduled task that reads:
+# prompts/weekly-update.md
+#
+# Recommended cadence: Saturday 09:00 Asia/Tokyo.
+# This workflow intentionally does not invoke the OpenAI API.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  show-runbook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Publish weekly runbook to job summary
+        shell: bash
+        run: |
+          {
+            echo "# Weekly Knowledge Update"
+            echo
+            echo "Primary executor: Codex scheduled task"
+            echo
+            echo "Read and execute prompts/weekly-update.md."
+            echo
+            cat prompts/weekly-update.md
+          } >> "$GITHUB_STEP_SUMMARY"
+
+# Optional API-billed fallback:
+# Add OPENAI_API_KEY and an official Codex Action only if that separate
+# billing path is explicitly desired.
