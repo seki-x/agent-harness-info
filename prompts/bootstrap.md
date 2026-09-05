@@ -69,10 +69,17 @@ vendor churn, support cross-links, and are not unnecessarily deep.
 
 ## Step 5 — Critique the taxonomy
 
-Act as a critical reviewer before accepting it. Look for missing domains,
+Prefer assigning this critique to a fresh-context subagent when the execution
+environment supports subagents. Give it the governing repository files and the
+candidate taxonomy, but do not preload it with the main agent's rationale or
+conclusions. Ask it to act as a critical reviewer and look for missing domains,
 overlaps, duplicated concepts, artificial distinctions, current-trend bias,
 vendor/framework bias, categories likely to age badly, and premature
-formalization of unstable terminology.
+formalization of unstable terminology. Treat its findings as review input, not
+as automatically authoritative decisions.
+
+If a fresh-context subagent is unavailable, perform the same review explicitly
+from an independent-reviewer perspective. Do not skip or weaken this step.
 
 Revise until the structure is coherent enough to serve as version 0.1. Only
 then update _meta/taxonomy.yaml, set status to initialized, and record the
@@ -110,9 +117,17 @@ that should not be machine-translated where appropriate.
 
 ## Step 9 — Verify the whole knowledge base
 
-Check taxonomy coherence, duplicated concepts, contradictory claims,
-unsupported broad claims, missing provenance, broken local links, frontmatter,
-source IDs, maturity labels, page IDs, and relationships. Fix issues found.
+Prefer assigning verification to a fresh-context subagent when available. Give
+it the governing repository files and the completed knowledge-base state, but
+do not provide a narrative that presumes the implementation is correct. Ask it
+to independently check taxonomy coherence, duplicated concepts, contradictory
+claims, unsupported broad claims, missing provenance, broken local links,
+frontmatter, source IDs, maturity labels, page IDs, and relationships.
+
+The main agent remains responsible for evaluating the findings and fixing
+confirmed issues. If a fresh-context subagent is unavailable, run the same
+checks from an independent-verifier perspective. Do not skip or weaken this
+step.
 
 ## Step 10 — Create the bootstrap changelog
 
