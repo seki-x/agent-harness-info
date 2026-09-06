@@ -39,3 +39,10 @@ knowledge/.
 An item may become canonical emerging or core knowledge, merge into an
 existing concept, or be removed when the signal fails to develop. Watchlist
 presence is not endorsement.
+
+## Candidates versus watchlist
+
+A GitHub Issue labeled `candidate:pending` has not yet been evaluated. A
+watchlist item has been evaluated and judged potentially important, but lacks
+enough evidence or maturity for canonical knowledge. Do not place raw user
+submissions directly into the watchlist.

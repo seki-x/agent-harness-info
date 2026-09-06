@@ -1,6 +1,6 @@
 name: Weekly Update Helper
 
-# The primary executor is a Codex scheduled task that reads:
+# The primary executor is a local Codex scheduled task that reads:
 # prompts/weekly-update.md
 #
 # Recommended cadence: Saturday 09:00 Asia/Tokyo.

@@ -19,6 +19,8 @@ news archive.
           ├── references/    ← provenance and research memory
           ├── watchlist/     ← not-yet-canonical ideas
           ├── changelog/     ← semantic history
+          ├── reports/       ← reader-facing weekly briefs
+          ├── runs/          ← weekly automation metadata
           │
           └── Docusaurus
                  ↓
@@ -32,6 +34,10 @@ remains the exact historical record.
 
 Research exports in the repository root are input material only; they are not
 canonical knowledge or evidence registry entries.
+
+GitHub Issues labeled `candidate:pending` are the unreviewed research inbox.
+They are evaluated during the next weekly cycle and become processed only after
+the corresponding weekly pull request is merged.
 
 ## Repository governance
 
@@ -66,7 +72,8 @@ Configure a Codex scheduled task with:
     Read and execute prompts/weekly-update.md in this repository.
 
 The weekly process asks whether new evidence materially changes the current
-knowledge state. A no-change run is valid.
+knowledge state. It also publishes a concise report under `reports/weekly/`. A
+no-change run is valid and still produces a report.
 
 ### Monthly maintenance
 
@@ -124,10 +131,11 @@ See website/CLOUDFLARE.md for setup.
 ## Initial setup checklist
 
 1. Commit this skeleton.
-2. Configure GitHub branch/ruleset protection for main.
-3. Connect the repository to Codex Cloud with the Node.js version in .nvmrc.
-4. Enable restricted agent internet access for research.
-5. Test prompts/bootstrap.md manually.
+2. Configure GitHub branch/ruleset protection for main when the repository plan
+   supports it.
+3. Run bootstrap with local Codex and the Node.js version in .nvmrc.
+4. Enable the internet access needed for research.
+5. Verify local `gh` authentication before enabling candidate processing.
 6. Review and merge the bootstrap pull request.
 7. Connect Cloudflare Pages.
 8. Create weekly and monthly Codex scheduled tasks.

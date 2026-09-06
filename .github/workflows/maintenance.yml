@@ -1,6 +1,6 @@
 name: Monthly Maintenance Helper
 
-# The primary executor is a Codex scheduled task that reads:
+# The primary executor is a local Codex scheduled task that reads:
 # prompts/monthly-maintenance.md
 #
 # Recommended cadence: first day of each month, 10:00 Asia/Tokyo.

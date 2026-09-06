@@ -1,0 +1,128 @@
+name: Finalize Processed Candidates
+
+on:
+  pull_request_target:
+    types:
+      - closed
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+jobs:
+  finalize:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout merged state
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Finalize candidate Issues from weekly run records
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          manifests_file="$(mktemp)"
+          gh api --paginate \
+            "repos/${REPOSITORY}/pulls/${PR_NUMBER}/files" \
+            --jq '.[] | select(.status != "removed") | .filename' \
+            | grep -E '^runs/weekly/[0-9]{4}-W[0-9]{2}\.json$' \
+            >"$manifests_file" || true
+
+          while IFS= read -r manifest; do
+            [ -n "$manifest" ] || continue
+            [ -f "$manifest" ] || {
+              echo "Missing merged run record: $manifest" >&2
+              exit 1
+            }
+
+            candidates_file="$(mktemp)"
+            python3 - "$manifest" >"$candidates_file" <<'PY'
+          import json
+          import re
+          import sys
+          from pathlib import Path
+
+          decisions = {
+              "NO_OP",
+              "REFERENCE_ONLY",
+              "WATCH",
+              "ADD",
+              "UPDATE",
+              "DEPRECATE",
+              "RESTRUCTURE",
+          }
+          path = Path(sys.argv[1])
+          value = json.loads(path.read_text(encoding="utf-8"))
+          report = value.get("report")
+          if not isinstance(report, str) or not re.fullmatch(
+              r"reports/weekly/[0-9]{4}-W[0-9]{2}\.md", report
+          ):
+              raise SystemExit(f"Invalid report path in {path}")
+          if not Path(report).is_file():
+              raise SystemExit(f"Missing report referenced by {path}: {report}")
+
+          seen = set()
+          candidates = value.get("candidate_issues")
+          if not isinstance(candidates, list):
+              raise SystemExit(f"candidate_issues must be an array in {path}")
+          for candidate in candidates:
+              if not isinstance(candidate, dict):
+                  raise SystemExit(f"Invalid candidate entry in {path}")
+              number = candidate.get("number")
+              decision = candidate.get("decision")
+              if (
+                  not isinstance(number, int)
+                  or isinstance(number, bool)
+                  or number <= 0
+                  or number in seen
+                  or decision not in decisions
+              ):
+                  raise SystemExit(f"Invalid candidate entry in {path}")
+              seen.add(number)
+              print(f"{number}\t{decision}\t{report}")
+          PY
+
+            while IFS=$'\t' read -r issue_number decision report; do
+              [ -n "$issue_number" ] || continue
+
+              labels="$(
+                gh api "repos/${REPOSITORY}/issues/${issue_number}" \
+                  --jq '[.labels[].name]'
+              )"
+              if ! jq -e 'index("candidate:pending") != null' <<<"$labels" \
+                >/dev/null; then
+                continue
+              fi
+
+              marker="candidate-finalize:pr=${PR_NUMBER}:issue=${issue_number}"
+              comments="$(
+                gh api --paginate \
+                  "repos/${REPOSITORY}/issues/${issue_number}/comments" \
+                  --jq '.[].body'
+              )"
+
+              if ! grep -Fq "<!-- ${marker} -->" <<<"$comments"; then
+                report_url="https://github.com/${REPOSITORY}/blob/${MERGE_SHA}/${report}"
+                gh issue comment "$issue_number" \
+                  --repo "$REPOSITORY" \
+                  --body "<!-- ${marker} -->
+                Processed in #${PR_NUMBER}. Decision: \`${decision}\`.
+                Weekly report: ${report_url}"
+              fi
+
+              gh issue edit "$issue_number" \
+                --repo "$REPOSITORY" \
+                --remove-label "candidate:pending" \
+                --add-label "candidate:processed"
+            done <"$candidates_file"
+          done <"$manifests_file"

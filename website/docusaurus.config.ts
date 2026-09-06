@@ -46,7 +46,18 @@ const config: Config = {
           showLastUpdateAuthor: false,
           showLastUpdateTime: true,
         },
-        blog: false,
+        blog: {
+          path: '../reports/weekly',
+          routeBasePath: 'reports',
+          blogTitle: 'Weekly Reports',
+          blogDescription:
+            'Weekly research briefings on AI Agent and Agent Harness engineering',
+          blogSidebarTitle: 'Recent Reports',
+          blogSidebarCount: 20,
+          showReadingTime: false,
+          editUrl:
+            'https://github.com/seki-x/agent-harness-info/edit/main/reports/weekly/',
+        },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -63,6 +74,11 @@ const config: Config = {
           sidebarId: 'knowledgeSidebar',
           position: 'left',
           label: 'Knowledge',
+        },
+        {
+          to: '/reports',
+          label: 'Weekly Reports',
+          position: 'left',
         },
         {
           type: 'docsVersionDropdown',

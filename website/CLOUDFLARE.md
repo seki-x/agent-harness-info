@@ -1,7 +1,8 @@
 # Cloudflare Pages Setup
 
 This file is an operator checklist. The website is a presentation layer over
-the canonical Markdown in ../knowledge.
+the canonical Markdown in ../knowledge and the non-canonical weekly reports in
+../reports/weekly.
 
 ## Git integration
 
@@ -41,6 +42,10 @@ Keep preview deployments enabled for pull-request branches:
     Production deployment
 
 Only main is production. Do not make Codex branches production branches.
+
+Merging a weekly report rebuilds the site without creating a new knowledge
+version. Monthly knowledge releases create frozen Docusaurus documentation
+snapshots; reports remain an unversioned chronological publication.
 
 ## Security
 

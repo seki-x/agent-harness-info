@@ -6,6 +6,7 @@
 
 - [ ] Bootstrap
 - [ ] Weekly update
+- [ ] Weekly report
 - [ ] Monthly maintenance
 - [ ] Knowledge add/update
 - [ ] Deprecation/removal
@@ -31,6 +32,7 @@
 - [ ] Relevant governance files were read
 - [ ] Provenance was updated
 - [ ] JSONL is valid
+- [ ] Weekly run metadata is valid, if applicable
 - [ ] Local links were checked
 - [ ] Docusaurus production build passes
 - [ ] Final diff was reviewed for unintended changes

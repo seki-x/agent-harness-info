@@ -56,3 +56,10 @@ Monthly maintenance may append to a weekly file or create:
 
 Do not copy weekly news into the changelog. Record semantic changes to the
 knowledge model.
+
+## Changelog versus weekly report
+
+The changelog records semantic changes to the knowledge model. A weekly report
+is a reader-facing summary of the research cycle and may discuss important
+WATCH or NO_OP findings even when canonical knowledge did not change. Do not
+expand the changelog into a general weekly briefing.

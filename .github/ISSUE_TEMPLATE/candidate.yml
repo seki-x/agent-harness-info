@@ -1,0 +1,39 @@
+name: Suggest a research candidate
+description: Submit one URL for evaluation in the next weekly research cycle.
+title: "[candidate] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Submit one page, repository, paper, post, or document related to AI
+        Agent or Agent Harness engineering.
+
+        Closing the Issue means the submission was queued, not endorsed or
+        accepted into the knowledge base.
+
+  - type: input
+    id: source-url
+    attributes:
+      label: Source URL
+      description: Enter one complete HTTP or HTTPS URL.
+      placeholder: https://example.com/...
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-it-matters
+    attributes:
+      label: Why this may matter
+      description: Optional context for the research agent.
+      placeholder: Briefly explain what appears relevant or novel.
+    validations:
+      required: false
+
+  - type: input
+    id: relevant-topic
+    attributes:
+      label: Relevant topic
+      description: Optional problem domain or existing knowledge area.
+      placeholder: Context management, evaluation, permissions, ...
+    validations:
+      required: false

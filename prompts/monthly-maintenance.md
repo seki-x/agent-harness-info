@@ -16,7 +16,8 @@ Read:
 - references/sources.jsonl;
 - recent references/seen.jsonl;
 - all active watchlist entries;
-- the previous month's changelogs.
+- the previous month's changelogs;
+- the previous month's weekly reports.
 
 ## Step 1 — Audit freshness
 
@@ -84,6 +85,11 @@ Fix broken links, metadata, version assumptions, and rendering regressions.
 Determine whether the post-maintenance state is suitable for a monthly release.
 Recommend a YYYY.MM name, but do not publish or create a frozen version before
 the maintenance changes are reviewed and merged unless explicitly instructed.
+
+Weekly reports are historical publications, not canonical knowledge or
+evidence. Do not rewrite old reports merely because canonical understanding
+has changed. Use canonical pages and the source registry for maintenance
+decisions.
 
 ## Final output
 

@@ -11,6 +11,9 @@ Suggested object:
 
     {"id":"seen-example","url":"https://example.invalid","title":"Example","publisher":"Example","published_at":null,"discovered_at":"YYYY-MM-DD","type":"unknown","topics":[],"decision":"NO_OP","reason":"Template only"}
 
+For a source submitted through the candidate inbox, add the optional integer
+field `candidate_issue` after the source was actually examined.
+
 Allowed decision values:
 
 - NO_OP
@@ -40,3 +43,8 @@ used_by contains canonical knowledge page IDs.
 - Avoid duplicate entries for the same source.
 - seen.jsonl is research memory.
 - sources.jsonl is canonical provenance.
+
+Submitting a candidate Issue does not create a `seen` or `sources` record. Add
+it to `seen.jsonl` only after the linked source was actually retrieved and
+evaluated. Add it to `sources.jsonl` only when it becomes usable canonical
+evidence.

@@ -1,0 +1,155 @@
+name: Candidate Intake
+
+on:
+  issues:
+    types:
+      - opened
+      - edited
+      - reopened
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  queue:
+    if: startsWith(github.event.issue.title, '[candidate]')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate submitted URL
+        id: candidate
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os
+          import re
+          from urllib.parse import urlsplit
+
+          body = os.environ.get("ISSUE_BODY", "")
+          match = re.search(
+              r"^### Source URL\s*\r?\n+(.*?)(?=\r?\n### |\Z)",
+              body,
+              flags=re.IGNORECASE | re.MULTILINE | re.DOTALL,
+          )
+          candidate = match.group(1).strip() if match else ""
+          try:
+              parsed = urlsplit(candidate)
+              valid = (
+                  candidate != ""
+                  and not any(character.isspace() for character in candidate)
+                  and parsed.scheme.lower() in {"http", "https"}
+                  and parsed.hostname is not None
+                  and parsed.username is None
+                  and parsed.password is None
+              )
+          except ValueError:
+              valid = False
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
+              out.write(f"valid={'true' if valid else 'false'}\n")
+          PY
+
+      - name: Queue valid candidate
+        if: steps.candidate.outputs.valid == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          labels="$(
+            gh api "repos/${REPOSITORY}/issues/${ISSUE_NUMBER}" \
+              --jq '[.labels[].name]'
+          )"
+
+          if jq -e 'index("candidate:processed") != null' <<<"$labels" \
+            >/dev/null; then
+            gh issue close "$ISSUE_NUMBER" \
+              --repo "$REPOSITORY" \
+              --reason completed
+            exit 0
+          fi
+
+          if ! jq -e 'index("candidate:pending") != null' <<<"$labels" \
+            >/dev/null; then
+            gh issue edit "$ISSUE_NUMBER" \
+              --repo "$REPOSITORY" \
+              --add-label "candidate:pending"
+          fi
+
+          if jq -e 'index("candidate:invalid") != null' <<<"$labels" \
+            >/dev/null; then
+            gh issue edit "$ISSUE_NUMBER" \
+              --repo "$REPOSITORY" \
+              --remove-label "candidate:invalid"
+          fi
+
+          comments="$(
+            gh api --paginate \
+              "repos/${REPOSITORY}/issues/${ISSUE_NUMBER}/comments" \
+              --jq '.[].body'
+          )"
+          if ! grep -Fq '<!-- candidate-intake:queued -->' \
+            <<<"$comments"; then
+            gh issue comment "$ISSUE_NUMBER" \
+              --repo "$REPOSITORY" \
+              --body "<!-- candidate-intake:queued -->
+            Queued for the next weekly research cycle. Closing this Issue means
+            the submission was received; it does not mean the source was endorsed
+            or accepted into canonical knowledge."
+          fi
+
+          gh issue close "$ISSUE_NUMBER" \
+            --repo "$REPOSITORY" \
+            --reason completed
+
+      - name: Mark invalid candidate
+        if: steps.candidate.outputs.valid != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          labels="$(
+            gh api "repos/${REPOSITORY}/issues/${ISSUE_NUMBER}" \
+              --jq '[.labels[].name]'
+          )"
+
+          if jq -e \
+            'index("candidate:pending") != null or
+             index("candidate:processed") != null' \
+            <<<"$labels" >/dev/null; then
+            gh issue close "$ISSUE_NUMBER" \
+              --repo "$REPOSITORY" \
+              --reason completed
+            exit 0
+          fi
+
+          if ! jq -e 'index("candidate:invalid") != null' <<<"$labels" \
+            >/dev/null; then
+            gh issue edit "$ISSUE_NUMBER" \
+              --repo "$REPOSITORY" \
+              --add-label "candidate:invalid"
+          fi
+
+          comments="$(
+            gh api --paginate \
+              "repos/${REPOSITORY}/issues/${ISSUE_NUMBER}/comments" \
+              --jq '.[].body'
+          )"
+          if ! grep -Fq '<!-- candidate-intake:invalid -->' \
+            <<<"$comments"; then
+            gh issue comment "$ISSUE_NUMBER" \
+              --repo "$REPOSITORY" \
+              --body "<!-- candidate-intake:invalid -->
+            The Source URL must contain exactly one complete HTTP or HTTPS URL.
+            This Issue remains open so the submission can be corrected."
+          fi

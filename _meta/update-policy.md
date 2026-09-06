@@ -23,6 +23,11 @@ The weekly process asks:
 
 It is not a weekly-news-writing task.
 
+Each successful weekly cycle also publishes a concise reader-facing report,
+including quiet weeks with no canonical change. A report explains what was
+examined and what is worth knowing; it is not canonical knowledge, evidence,
+or a substitute for the semantic changelog.
+
 Each meaningful candidate is classified as one of:
 
 - NO_OP
@@ -64,15 +69,26 @@ It may perform larger refactors than a weekly update.
 
 Do not allow autonomous direct pushes to main.
 
+The candidate-intake workflow is not a content update. It may only validate,
+label, comment on, and close GitHub Issues; it has no repository write
+permission. Processing results, weekly reports, and run metadata remain part
+of the reviewed weekly PR.
+
 ## Release policy
 
 Git commits preserve exact engineering history. Knowledge releases preserve
 human-meaningful snapshots. The recommended release cadence is monthly after
 maintenance is merged, using a YYYY.MM label such as 2026.09.
 
-A release may include a Git tag, optional GitHub Release, and Docusaurus
-documentation snapshot. Do not create a Docusaurus version for every commit or
-weekly update.
+A YYYY.MM Git tag identifies the authoritative stable release. A release may
+also include an optional GitHub Release and a derived Docusaurus documentation
+snapshot. The website should default to the latest stable snapshot while
+keeping the accepted, unreleased current state available when practical. Do
+not create a Docusaurus version for every commit or weekly update.
+
+Weekly reports are published independently of monthly knowledge releases.
+They should identify the stable release used as their baseline and clearly
+distinguish released knowledge from accepted but unreleased changes.
 
 ## Translation policy
 
