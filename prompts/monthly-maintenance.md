@@ -36,8 +36,20 @@ sources referenced by pages but missing from the registry.
 
 Critically review taxonomy and page boundaries. Ask whether concepts should
 merge or split, whether a category is historical terminology, whether a durable
-domain is missing, whether the hierarchy is awkward or too deep, and whether
-vendor vocabulary leaked into the canonical structure.
+domain is missing, and whether vendor vocabulary leaked into the canonical
+structure.
+
+Audit hierarchy drift explicitly:
+
+- flat buckets whose peer pages actually have parent/child relationships;
+- directories with only one meaningful child;
+- thin pages that should become sections of a parent;
+- oversized pages hiding independently useful child concepts;
+- duplicate explanations caused by poor page boundaries;
+- navigation depth that no longer reflects conceptual depth;
+- `related` links used where containment or specialization is more accurate;
+- concepts duplicated across domains instead of having one primary home and
+  cross-links.
 
 Refactor only when a material improvement is justified.
 

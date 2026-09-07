@@ -51,6 +51,10 @@ For scheduled work, also read the corresponding file under prompts/.
 - Use social media and discussion forums mainly as discovery signals.
 - Prefer updating or refactoring existing knowledge over appending news.
 - Organize by durable problem domains, not vendors or frameworks.
+- Preserve meaningful semantic hierarchy. Do not flatten containment or
+  specialization relationships into peer pages merely for simplicity.
+- Use directories for durable navigation groups, standalone pages for
+  independently useful concepts, and H2/H3 sections for subordinate concepts.
 - Distinguish established, emerging, and watchlist knowledge.
 - Preserve provenance for factual claims and material editorial changes.
 - Never fabricate sources, dates, adoption evidence, or consensus.

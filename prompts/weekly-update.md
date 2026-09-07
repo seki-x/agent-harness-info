@@ -100,6 +100,15 @@ Ask whether it materially alters engineering understanding, whether evidence is
 strong and independent, whether it is vendor-specific, and whether an existing
 page is the right conceptual home.
 
+Before classifying a concept as ADD or RESTRUCTURE, decide whether it is an
+independent concept, a child of an existing concept, a section within an
+existing page, or only a related implementation/example. Do not create a peer
+page when the evidence supports a parent/child relationship.
+
+If a newly discovered concept belongs as a new section within an existing
+canonical page, classify the canonical change as UPDATE rather than ADD. Use
+RESTRUCTURE when the taxonomy or an existing page boundary actually changes.
+
 ## Step 6 — Update research memory
 
 Record every meaningful examined source in references/seen.jsonl, including
@@ -123,12 +132,18 @@ coherently. Prefer rewriting over appending a dated news paragraph. Remove
 obsolete language and update related pages, metadata, taxonomy, and sources as
 needed.
 
+When evidence reveals a better hierarchy, move or refactor existing content
+instead of preserving a flat structure solely for path stability. Keep
+canonical page IDs stable where the underlying concept remains the same.
+
 For REFERENCE_ONLY, avoid prose changes unless provenance materially improves.
 
 ## Step 9 — Check cross-page consequences
 
 Search for related claims after every semantic change. Resolve contradictions,
 old terminology, broken relationships, and stale duplicate explanations.
+Check that new pages and sections preserve meaningful containment, do not
+create thin pages, and have one clear primary home.
 
 ## Step 10 — Write the weekly changelog
 
@@ -201,9 +216,10 @@ by the update.
 ## Step 14 — Review the diff
 
 Check for novelty bias, overreaction to one source, vendor bias, accidental
-taxonomy churn, unsupported confidence, duplicated prose, and incidental
-website changes. Confirm every candidate listed in run metadata was actually
-evaluated and appears consistently in research memory and the weekly report.
+taxonomy churn, hierarchy flattening, unnecessary depth, unsupported
+confidence, duplicated prose, and incidental website changes. Confirm every
+candidate listed in run metadata was actually evaluated and appears
+consistently in research memory and the weekly report.
 
 ## Final output
 

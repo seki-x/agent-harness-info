@@ -73,6 +73,23 @@ Prefer, in order:
 Do not append a "latest developments" section to every page. Canonical pages
 should read as coherent descriptions of the present state.
 
+## Knowledge structure
+
+Model one primary navigation tree while preserving cross-cutting relationships
+as links. The primary tree should follow durable conceptual containment:
+
+- directories represent stable problem domains or subdomains;
+- standalone pages represent independently useful knowledge units;
+- H2/H3 sections represent subordinate concepts that do not justify their own
+  pages;
+- `related` links represent dependencies and associations outside the primary
+  hierarchy.
+
+Distinguish containment and specialization from dependency and association.
+Do not turn all related concepts into peers, and do not force graph-shaped
+knowledge into duplicate locations. Avoid both flat buckets of loosely grouped
+pages and directory depth that adds no conceptual meaning.
+
 ## Deprecation and deletion
 
 Remove obsolete claims from current explanatory text when they are no longer

@@ -1,4 +1,4 @@
-schema_version: 1
+schema_version: 2
 status: uninitialized
 generated_at: null
 
@@ -8,5 +8,46 @@ principles:
     - vendor
     - framework
     - product
+  hierarchy:
+    preserve_semantic_parent_child_relationships: true
+    avoid_unnecessary_flattening: true
+    avoid_unnecessary_depth: true
+    preferred_max_navigation_depth: 3
+    avoid_unjustified_single_child_groups: true
+  page_boundaries:
+    standalone_page_when:
+      - independently useful and referenceable
+      - requires substantial explanation
+      - has its own meaningful design space or trade-offs
+      - likely to evolve independently
+      - meaningfully referenced from multiple concepts
+    keep_as_section_when:
+      - mainly a component, subtype, approach, or detail of its parent
+      - separation would create a thin page
+      - independent treatment adds little explanatory value
+
+structure:
+  purpose: primary-navigation-tree
+  recursive_children_field: children
+  page_nodes_are_leaves: true
+  records_intra_page_headings: false
+  records_cross_links: false
+  node_schema:
+    required_fields:
+      - id
+      - title
+      - kind
+    allowed_kinds:
+      domain: top-level durable problem domain
+      group: navigation container, subdomain, or substantive parent concept with child nodes
+      page: standalone leaf canonical knowledge page
+    optional_fields:
+      - description
+      - children
+  materialization:
+    domain_and_group: directory with index.md when the node needs a navigable overview or substantive parent-concept page
+    page: Markdown file representing a standalone leaf concept
+    subordinate_concept: H2 or H3 in its parent page, not a taxonomy node
+    cross_cutting_relationship: related link, not a duplicate node
 
 domains: []
