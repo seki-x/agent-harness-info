@@ -3,10 +3,9 @@ id: index
 title: AI Agent Knowledge
 description: A living, evidence-backed knowledge base for AI Agent and Agent Harness engineering.
 status: core
-last_verified: "2026-09-06"
+last_verified: "2026-09-07"
 confidence: high
-tags:
-  - meta
+tags: [meta]
 related: []
 sources: []
 sidebar_position: 1
@@ -14,19 +13,20 @@ sidebar_position: 1
 
 # AI Agent Knowledge
 
-This site is the presentation layer for a living, evidence-backed knowledge
-base of AI Agent and Agent Harness engineering.
+This knowledge base organizes AI Agent and Agent Harness engineering by durable problems. Read the domain overviews for the model of the field, then follow child pages for design choices and evidence.
 
-The domain taxonomy and canonical knowledge pages are initialized by
-prompts/bootstrap.md after broad research and taxonomy critique. This page is
-only the stable entry point for the repository and does not claim a substantive
-engineering conclusion.
+## Problem domains {#problem-domains}
 
-## How to use this repository {#how-to-use-this-repository}
+- [Execution and control](execution/index.md): task contracts, control flow, recovery and coordination.
+- [Context and memory](context/index.md): model-visible information, retrieval, retained knowledge and authored procedures.
+- [Action and integration](action/index.md): tool contracts, action surfaces and interoperability boundaries.
+- [Security and human control](security/index.md): untrusted inputs, enforced authority and human decisions.
+- [Evaluation and operations](assurance/index.md): outcome measurement, diagnosis, releases and resource constraints.
 
-- Read the governance files under _meta/ before editing canonical knowledge.
-- Treat knowledge/ as the current source of truth.
-- Use references/ for provenance and research memory.
-- Use watchlist/ for ideas that are promising but not yet sufficiently
-  validated.
-- Use prompts/ for bootstrap, weekly update, and monthly maintenance runs.
+## Reading the evidence {#reading-the-evidence}
+
+Core means that a page's engineering model is sufficiently established to use as a baseline; it does not promise that every implementation works. Emerging marks a credible but less stable synthesis. Pages distinguish source findings from editorial design recommendations and preserve the scope of experiments and case studies.
+
+This is the initial current knowledge state, reviewed on 2026-09-07, not a frozen release. Primary evidence includes technical documentation, specifications, engineering reports and research. It is a selective engineering synthesis, not an exhaustive literature review or a claim of universal consensus.
+
+Research provenance, evaluated watchlist ideas and semantic history live in the repository's references/, watchlist/ and changelog/ directories. Canonical English pages live here; translations and publication snapshots are derived outputs.
