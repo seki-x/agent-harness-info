@@ -1,6 +1,6 @@
 schema_version: 2
-status: uninitialized
-generated_at: null
+status: initialized
+generated_at: "2026-09-07"
 
 principles:
   primary_organization: problem-domain
@@ -50,4 +50,66 @@ structure:
     subordinate_concept: H2 or H3 in its parent page, not a taxonomy node
     cross_cutting_relationship: related link, not a duplicate node
 
-domains: []
+domains:
+  - id: execution
+    title: Execution and control
+    kind: domain
+    description: Task execution, transitions, recovery and allocation of work.
+    children:
+      - id: control-flow
+        title: Control flow
+        kind: page
+      - id: durable-execution
+        title: Durable execution
+        kind: page
+      - id: multi-agent-coordination
+        title: Multi-agent coordination
+        kind: page
+  - id: context
+    title: Context and memory
+    kind: domain
+    description: Model-visible information and knowledge retained or authored for
+      reuse.
+    children:
+      - id: retrieval-grounding
+        title: Retrieval and grounding
+        kind: page
+      - id: persistent-memory
+        title: Persistent memory
+        kind: page
+      - id: reusable-procedures
+        title: Reusable procedures
+        kind: page
+  - id: action
+    title: Action and integration
+    kind: domain
+    description: Contracts and boundaries for effects and external capabilities.
+    children:
+      - id: interoperability
+        title: Interoperability
+        kind: page
+  - id: security
+    title: Security and human control
+    kind: domain
+    description: Trust boundaries, enforced authority and user decisions.
+    children:
+      - id: isolation-authorization
+        title: Isolation and authorization
+        kind: page
+      - id: human-oversight
+        title: Human oversight
+        kind: page
+  - id: assurance
+    title: Evaluation and operations
+    kind: domain
+    description: Evidence of correctness and the operation of bounded systems.
+    children:
+      - id: evaluation-design
+        title: Evaluation design
+        kind: page
+      - id: observability
+        title: Observability
+        kind: page
+      - id: resource-budgets
+        title: Resource budgets
+        kind: page

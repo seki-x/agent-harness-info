@@ -1,12 +1,170 @@
 schema_version: 1
 canonical_language: en
-
-# Keep this empty until bootstrap identifies terms that need stable wording.
-# Example:
-# terms:
-#   agent-harness:
-#     canonical: "Agent Harness"
-#     translate: false
-#     aliases: []
-
-terms: {}
+terms:
+  agent:
+    canonical: agent
+    translate: true
+    aliases:
+    - AI agent
+    definition: A system in which a model can select subsequent actions using observations;
+      a repository working definition, not universal industry usage.
+  agent-harness:
+    canonical: Agent Harness
+    translate: false
+    aliases:
+    - harness
+    definition: Software surrounding the model that assembles context, dispatches
+      actions and manages execution.
+  workflow:
+    canonical: workflow
+    translate: true
+    aliases: &id001 []
+    definition: Control whose transitions are prescribed in code; may contain adaptive
+      agent steps.
+  context-engineering:
+    canonical: context engineering
+    translate: true
+    aliases: *id001
+    definition: Assembly and maintenance of model-visible information for each decision.
+  working-context:
+    canonical: working context
+    translate: true
+    aliases: *id001
+    definition: Information supplied to a model invocation; distinct from durable
+      task state.
+  durable-execution:
+    canonical: durable execution
+    translate: true
+    aliases: *id001
+    definition: Preservation and recovery of resumable task execution, including reconciliation
+      of external effects.
+  checkpoint:
+    canonical: checkpoint
+    translate: true
+    aliases: *id001
+    definition: A persisted task-state boundary used for resumption; not necessarily
+      a snapshot of the external environment.
+  persistent-memory:
+    canonical: persistent memory
+    translate: true
+    aliases:
+    - long-term memory
+    definition: Managed information retained for future interactions, with scope and
+      update/deletion policies.
+  reusable-procedure:
+    canonical: reusable procedure
+    translate: true
+    aliases: *id001
+    definition: Deliberately authored and versioned task guidance with supporting
+      resources; distinct from automatically retained experience.
+  tool:
+    canonical: tool
+    translate: true
+    aliases: *id001
+    definition: An operation exposed to a model through a contract and executed by
+      the surrounding application or service.
+  agent-computer-interface:
+    canonical: agent-computer interface
+    translate: true
+    aliases:
+    - ACI
+    definition: The action and observation interface presented to an agent.
+  grounding:
+    canonical: grounding
+    translate: true
+    aliases: *id001
+    definition: Connecting a claim or action to supporting evidence; retrieval alone
+      does not establish it.
+  idempotency:
+    canonical: idempotency
+    translate: true
+    aliases: *id001
+    definition: Repeating the same logical operation does not add effects beyond its
+      first successful application.
+  prompt-injection:
+    canonical: prompt injection
+    translate: true
+    aliases: *id001
+    definition: Attacker-controlled content influencing the agent to depart from authorized
+      task behavior.
+  indirect-prompt-injection:
+    canonical: indirect prompt injection
+    translate: true
+    aliases: *id001
+    definition: Prompt injection delivered through external data rather than a direct
+      authorized user request.
+  handoff:
+    canonical: handoff
+    translate: true
+    aliases: *id001
+    definition: Transfer of task responsibility and necessary context to another worker;
+      distinct from tool invocation.
+  eval:
+    canonical: evaluation
+    translate: true
+    aliases:
+    - eval
+    definition: A task and grading process assessing specified system behavior.
+  trace:
+    canonical: trace
+    translate: true
+    aliases:
+    - trajectory
+    definition: Correlated records of observed operations in an execution.
+  rag:
+    canonical: RAG
+    translate: false
+    aliases:
+    - Retrieval-Augmented Generation
+    definition: Retrieval-Augmented Generation; historical paper name and broader
+      retrieval-plus-generation terminology.
+  react:
+    canonical: ReAct
+    translate: false
+    aliases: []
+    definition: Named research approach interleaving reasoning and actions.
+  mcp:
+    canonical: MCP
+    translate: false
+    aliases:
+    - Model Context Protocol
+    definition: Model Context Protocol; a protocol name, not a synonym for tool use.
+  a2a:
+    canonical: A2A
+    translate: false
+    aliases:
+    - Agent2Agent
+    definition: Agent2Agent protocol; remote task interaction is distinct from tool/resource
+      exposure.
+  agent-skills:
+    canonical: Agent Skills
+    translate: false
+    aliases: []
+    definition: Named procedural-package specification; not every use of the word
+      skill denotes this format.
+  skill-md:
+    canonical: SKILL.md
+    translate: false
+    aliases: []
+    definition: Required entry file in the Agent Skills format.
+  opentelemetry:
+    canonical: OpenTelemetry
+    translate: false
+    aliases: []
+    definition: Named observability project; general tracing and agent-specific conventions
+      have different maturity.
+  json-schema:
+    canonical: JSON Schema
+    translate: false
+    aliases: []
+    definition: Named schema language used by several tool and structured-output interfaces.
+  pass-at-k:
+    canonical: pass@k
+    translate: false
+    aliases: []
+    definition: Success at least once in k attempts; distinct from all-trial reliability.
+  pass-power-k:
+    canonical: pass^k
+    translate: false
+    aliases: []
+    definition: Success in all k trials; distinct from success at least once.
